@@ -46,19 +46,25 @@ public class DiceSet {
 	}
 
 	public DiceSet(String set) {
+		this(1, 6, 0);
 		if (set.equals(DSA)) {
 			dsa = true;
 			count = 3;
 			sides = 20;
-			modifier = 0;
 		} else {
-			String[] parts = set.split("[d+-]");
-			count = Integer.parseInt(parts[0]);
-			sides = Integer.parseInt(parts[1]);
-			if (parts.length > 2) {
-				modifier = Integer.parseInt(parts[2]);
-				if (set.indexOf('-') >= 0)
-					modifier = -modifier;
+			try {
+				String[] parts = set.split("[d+-]");
+				count = Integer.parseInt(parts[0]);
+				sides = Integer.parseInt(parts[1]);
+				if (parts.length > 2) {
+					modifier = Integer.parseInt(parts[2]);
+					if (set.indexOf('-') >= 0)
+						modifier = -modifier;
+				}
+			} catch (IndexOutOfBoundsException e) {
+				// pass
+			} catch (NumberFormatException e) {
+				// pass
 			}
 		}
 	}
