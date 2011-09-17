@@ -77,7 +77,7 @@ public class GameMasterDice extends ListActivity
 	public void onClick(View view) {
 		Button btn = (Button)view;
 		if (btn == button_more) {
-			selectDice(new DiceSet(), new OnDiceChange() {
+			selectDice(new DiceSet(), true, new OnDiceChange() {
 				public void onDiceChange(DiceSet ds) {
 					roll(ds);
 				 }});
@@ -103,7 +103,7 @@ public class GameMasterDice extends ListActivity
 		final Button btn = (Button)view;
 		Log.d(TAG, "onLongClicked " + btn);
 		String diceVal = btn.getText().toString();
-		selectDice(new DiceSet(diceVal), new OnDiceChange() {
+		selectDice(new DiceSet(diceVal), false, new OnDiceChange() {
 			public void onDiceChange(DiceSet ds) {
 				btn.setText(ds.toString());
 				// store button config
@@ -133,6 +133,7 @@ public class GameMasterDice extends ListActivity
 		return sp;
 	}
 
+	// create a DiceSet by setting count, sides, modifier
 	void configureDice(DiceSet defaults, final OnDiceChange onOk) {
 		android.view.LayoutInflater inflater = (android.view.LayoutInflater)getSystemService(
 			      LAYOUT_INFLATER_SERVICE);
@@ -159,10 +160,12 @@ public class GameMasterDice extends ListActivity
 			.create().show();
 	}
 
-	void selectDice(final DiceSet defaults, final OnDiceChange onOk) {
+	// choose a DiceSet from the last-used list
+	void selectDice(final DiceSet defaults, boolean hideBtns, final OnDiceChange onOk) {
 		final ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this,
 				android.R.layout.simple_spinner_dropdown_item);
-		dicecache.populate(adapter, java.util.Arrays.asList(button_cfg));
+		dicecache.populate(adapter, hideBtns ? java.util.Arrays.asList(button_cfg)
+							: new ArrayList<DiceSet>());
 		adapter.add(getString(R.string.ds_custom));
 		new AlertDialog.Builder(this)
 			.setTitle(R.string.ds_choose)
