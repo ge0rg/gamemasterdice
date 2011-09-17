@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GM Dice</string>
+    <string name="spin_count">Number of Dice</string>
+    <string name="spin_sides">Sides on a die</string>
+    <string name="spin_modifier">Probe Modifier</string>
+
+    <string name="log_empty">Long-press to change dice.</string>
+    <string name="roll_placeholder">Roll it!</string>
+</resources>
