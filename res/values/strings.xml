@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">GM Dice</string>
     <string name="app_name_long">GameMaster Dice</string>
+    <string name="ds_choose">Choose dice</string>
+    <string name="ds_custom">More...</string>
+    <string name="ds_config">Configure dice</string>
     <string name="spin_count">Number of Dice</string>
     <string name="spin_sides">Sides on a die</string>
     <string name="spin_modifier">Probe Modifier</string>

@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GameMasterDice extends ListActivity
@@ -39,10 +40,17 @@ public class GameMasterDice extends ListActivity
 	// map button IDs to dice
 	int button_ids[] = { R.id.die0, R.id.die1, R.id.die2, R.id.die3 };
 	Button buttons[];
+	Button button_more;
 	TextView resultview;
 	ArrayAdapter<String> resultlog;
 
-
+	DiceSet button_cfg[] = {
+		new DiceSet(DiceSet.DSA),
+		new DiceSet(1, 20, 0),
+		new DiceSet(1, 6, 0),
+		new DiceSet(1, 6, 4)
+	};
+	DiceCache dicecache = new DiceCache(10);
 	Random generator = new Random();
 
 	@Override
@@ -57,7 +65,10 @@ public class GameMasterDice extends ListActivity
 			buttons[i] = (Button)findViewById(button_ids[i]);
 			buttons[i].setOnClickListener(this);
 			buttons[i].setOnLongClickListener(this);
+			buttons[i].setText(button_cfg[i].toString());
 		}
+		button_more = (Button)findViewById(R.id.more);
+		button_more.setOnClickListener(this);
 		resultview = (TextView)findViewById(R.id.rollresult);
 		resultlog = new ArrayAdapter<String>(this, R.layout.view_log);
 		setListAdapter(resultlog);
@@ -65,15 +76,26 @@ public class GameMasterDice extends ListActivity
 
 	public void onClick(View view) {
 		Button btn = (Button)view;
-		String diceVal = btn.getText().toString();
-		DiceSet ds = new DiceSet(diceVal);
+		if (btn == button_more) {
+			selectDice(new DiceSet(), new OnDiceChange() {
+				public void onDiceChange(DiceSet ds) {
+					roll(ds);
+				 }});
+		} else {
+			String diceVal = btn.getText().toString();
+			DiceSet ds = new DiceSet(diceVal);
+			roll(ds);
+		}
+	}
+	
+	public void roll(DiceSet ds) {
 		String roll = ds.roll(generator);
+		dicecache.add(ds);
 
-		Log.d(TAG, "clicked on " + diceVal + ": " + ds);
-		Log.d(TAG, "rolled: " + roll);
 		resultview.setText(roll);
 
 		String rolllog = ds.toString() + ": " + roll;
+		Log.d(TAG, "rolled: " + rolllog);
 		resultlog.add(rolllog);
 	}
 
@@ -81,9 +103,14 @@ public class GameMasterDice extends ListActivity
 		final Button btn = (Button)view;
 		Log.d(TAG, "onLongClicked " + btn);
 		String diceVal = btn.getText().toString();
-		configureDice(new DiceSet(diceVal), new OnDiceChange() {
+		selectDice(new DiceSet(diceVal), new OnDiceChange() {
 			public void onDiceChange(DiceSet ds) {
 				btn.setText(ds.toString());
+				// store button config
+				for (int i = 0; i < buttons.length; i++) {
+					if (btn == buttons[i])
+						button_cfg[i] = ds;
+				}
 			}});
 		return true;
 	}
@@ -115,7 +142,7 @@ public class GameMasterDice extends ListActivity
 		final Spinner sp_m = setupSpinner(group, R.id.spin_modifier, SPIN_MODIFIER, defaults.modifier);
 
 		new AlertDialog.Builder(this)
-			.setTitle("Configure Die")
+			.setTitle(R.string.ds_config)
 			.setView(group)
 			.setPositiveButton(android.R.string.ok,
 				new DialogInterface.OnClickListener() {
@@ -132,6 +159,26 @@ public class GameMasterDice extends ListActivity
 			.create().show();
 	}
 
+	void selectDice(final DiceSet defaults, final OnDiceChange onOk) {
+		final ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this,
+				android.R.layout.simple_spinner_dropdown_item);
+		dicecache.populate(adapter, java.util.Arrays.asList(button_cfg));
+		adapter.add(getString(R.string.ds_custom));
+		new AlertDialog.Builder(this)
+			.setTitle(R.string.ds_choose)
+			.setAdapter(adapter, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						String ds = adapter.getItem(which).toString();
+						Log.d(TAG, "item clicked: " + which + " - " + ds);
+						if (which == adapter.getCount() - 1)
+							configureDice(defaults, onOk);
+						else
+							onOk.onDiceChange(new DiceSet(ds));
+					}
+				})
+			.setNegativeButton(android.R.string.cancel, null)
+			.create().show();
+	}
 }
 
 abstract class OnDiceChange {
