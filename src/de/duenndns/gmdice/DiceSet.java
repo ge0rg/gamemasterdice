@@ -28,7 +28,8 @@ import java.util.Random;
  * @param modifier value to add/subtract to the result
  */
 public class DiceSet {
-	public static String DSA = "DSA";
+	// 3D20 is special: three attribute probes together instead of a sum
+	public static String DSA = "3D20"; 
 	public int count;
 	public int sides;
 	public int modifier;
@@ -71,7 +72,7 @@ public class DiceSet {
 			return String.format("%dd%d%+d", count, sides, modifier);
 	}
 
-	public String rollDSA(Random gen) {
+	public String roll3D20(Random gen) {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < count; i++) {
 			int roll1 = gen.nextInt(sides) + 1;
@@ -84,7 +85,7 @@ public class DiceSet {
 
 	public String roll(Random gen) {
 		if (dsa)
-			return rollDSA(gen);
+			return roll3D20(gen);
 
 		int result = 0;
 

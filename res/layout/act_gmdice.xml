@@ -46,7 +46,7 @@
 			android:layout_weight="1"
 			android:layout_width="100sp"
 			android:layout_height="wrap_content"
-			android:text="DSA"
+			android:text="3D20"
 			/>
 		<Button
 			android:id="@+id/die2"
