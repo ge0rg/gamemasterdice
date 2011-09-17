@@ -65,7 +65,6 @@ public class GameMasterDice extends ListActivity
 
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		loadDicePrefs();
 
 		buttons = new Button[button_ids.length];
 		for (int i = 0; i < button_ids.length; i++) {
@@ -95,7 +94,10 @@ public class GameMasterDice extends ListActivity
 	}
 
 	void loadDicePrefs() {
-		String[] btn_dice = prefs.getString("buttons", "").split("\\|");
+		String btn_str = prefs.getString("buttons", null);
+		if (btn_str == null)
+			return;
+		String[] btn_dice = btn_str.split("\\|");
 		for (int i = 0; i < btn_dice.length; i++) {
 			Log.d(TAG, "load: " + btn_dice[i]);
 			button_cfg[i] = new DiceSet(btn_dice[i]);

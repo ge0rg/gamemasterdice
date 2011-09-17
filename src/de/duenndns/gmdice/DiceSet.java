@@ -29,7 +29,7 @@ import java.util.Random;
  */
 public class DiceSet {
 	// 3D20 is special: three attribute probes together instead of a sum
-	public static String DSA = "3D20"; 
+	public static final String DSA = "3D20";
 	public int count;
 	public int sides;
 	public int modifier;
