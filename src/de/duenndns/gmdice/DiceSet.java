@@ -106,5 +106,20 @@ public class DiceSet {
 		}
 		return sb.toString();
 	}
+
+	// utility methods
+	public int hashCode() {
+		return (dsa?1000000:0) + count*10000 + sides*100 + modifier;
+	}
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null)
+			return false;
+		if (getClass() != o.getClass())
+			return false;
+		DiceSet d = (DiceSet)o;
+		return (count == d.count && sides == d.sides && modifier == d.modifier && dsa == d.dsa);
+	}
 }
 
