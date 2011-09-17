@@ -39,28 +39,28 @@
 			android:layout_weight="1"
 			android:layout_width="100sp"
 			android:layout_height="wrap_content"
-			android:text="1d20"
+			android:text="!"
 			/>
 		<Button
 			android:id="@+id/die1"
 			android:layout_weight="1"
 			android:layout_width="100sp"
 			android:layout_height="wrap_content"
-			android:text="3D20"
+			android:text="!"
 			/>
 		<Button
 			android:id="@+id/die2"
 			android:layout_weight="1"
 			android:layout_width="100sp"
 			android:layout_height="wrap_content"
-			android:text="1d6"
+			android:text="!"
 			/>
 		<Button
 			android:id="@+id/die3"
 			android:layout_weight="1"
 			android:layout_width="100sp"
 			android:layout_height="wrap_content"
-			android:text="1d6+4"
+			android:text="!"
 			/>
 		<Button
 			android:id="@+id/more"

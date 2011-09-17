@@ -72,7 +72,6 @@ public class GameMasterDice extends ListActivity
 			buttons[i] = (Button)findViewById(button_ids[i]);
 			buttons[i].setOnClickListener(this);
 			buttons[i].setOnLongClickListener(this);
-			buttons[i].setText(button_cfg[i].toString());
 		}
 		button_more = (Button)findViewById(R.id.more);
 		button_more.setOnClickListener(this);
@@ -82,7 +81,15 @@ public class GameMasterDice extends ListActivity
 	}
 
 	@Override
-	public void onPause() {
+	protected void onResume() {
+		super.onResume();
+		loadDicePrefs();
+		for (int i = 0; i < button_ids.length; i++)
+			buttons[i].setText(button_cfg[i].toString());
+	}
+
+	@Override
+	protected void onPause() {
 		super.onPause();
 		storeDicePrefs();
 	}
@@ -182,7 +189,6 @@ public class GameMasterDice extends ListActivity
 			.setPositiveButton(android.R.string.ok,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
-						Log.d(TAG, "ok clicked");
 						DiceSet ds = new DiceSet((Integer)sp_c.getSelectedItem(),
 							(Integer)sp_s.getSelectedItem(),
 							(Integer)sp_m.getSelectedItem());
