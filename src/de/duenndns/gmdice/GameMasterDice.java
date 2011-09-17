@@ -20,7 +20,9 @@ package de.duenndns.gmdice;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.*;
@@ -43,6 +45,7 @@ public class GameMasterDice extends ListActivity
 	Button button_more;
 	TextView resultview;
 	ArrayAdapter<String> resultlog;
+	SharedPreferences prefs;
 
 	DiceSet button_cfg[] = {
 		new DiceSet(DiceSet.DSA),
@@ -60,6 +63,10 @@ public class GameMasterDice extends ListActivity
 		setContentView(R.layout.act_gmdice);
 		setTitle(R.string.app_name_long);
 
+
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		loadDicePrefs();
+
 		buttons = new Button[button_ids.length];
 		for (int i = 0; i < button_ids.length; i++) {
 			buttons[i] = (Button)findViewById(button_ids[i]);
@@ -72,6 +79,33 @@ public class GameMasterDice extends ListActivity
 		resultview = (TextView)findViewById(R.id.rollresult);
 		resultlog = new ArrayAdapter<String>(this, R.layout.view_log);
 		setListAdapter(resultlog);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		storeDicePrefs();
+	}
+
+	void loadDicePrefs() {
+		String[] btn_dice = prefs.getString("buttons", "").split("\\|");
+		for (int i = 0; i < btn_dice.length; i++) {
+			Log.d(TAG, "load: " + btn_dice[i]);
+			button_cfg[i] = new DiceSet(btn_dice[i]);
+		}
+		dicecache.loadFromString(prefs.getString("cache", null));
+	}
+
+	void storeDicePrefs() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < button_cfg.length; i++) {
+			sb.append(button_cfg[i]);
+			if (i < button_cfg.length - 1)
+			sb.append("|");
+		}
+		prefs.edit().putString("buttons", sb.toString())
+			.putString("cache", dicecache.toString())
+			.commit();
 	}
 
 	public void onClick(View view) {
