@@ -32,6 +32,7 @@ public class GameMasterDice extends ListActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_gmdice);
+		setTitle(R.string.app_name_long);
 
 		buttons = new Button[button_ids.length];
 		for (int i = 0; i < button_ids.length; i++) {
