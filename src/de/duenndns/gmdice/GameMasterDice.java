@@ -77,6 +77,11 @@ public class GameMasterDice extends ListActivity
 		resultview = (TextView)findViewById(R.id.rollresult);
 		resultlog = new ArrayAdapter<String>(this, R.layout.view_log);
 		setListAdapter(resultlog);
+
+
+		if (savedInstanceState != null) {
+			getListView().onRestoreInstanceState(savedInstanceState.getParcelable("resultlog"));
+		}
 	}
 
 	@Override
@@ -91,6 +96,12 @@ public class GameMasterDice extends ListActivity
 	protected void onPause() {
 		super.onPause();
 		storeDicePrefs();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		savedInstanceState.putParcelable("resultlog", getListView().onSaveInstanceState());
+		super.onSaveInstanceState(savedInstanceState);
 	}
 
 	void loadDicePrefs() {
