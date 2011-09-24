@@ -30,6 +30,7 @@
 		/>
 	<LinearLayout
 		android:orientation="horizontal"
+		android:gravity="center"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		>
@@ -38,35 +39,35 @@
 			android:id="@+id/die0"
 			android:layout_weight="1"
 			android:layout_width="100sp"
-			android:layout_height="wrap_content"
+			android:layout_height="55sp"
 			android:text="!"
 			/>
 		<Button
 			android:id="@+id/die1"
 			android:layout_weight="1"
 			android:layout_width="100sp"
-			android:layout_height="wrap_content"
+			android:layout_height="55sp"
 			android:text="!"
 			/>
 		<Button
 			android:id="@+id/die2"
 			android:layout_weight="1"
 			android:layout_width="100sp"
-			android:layout_height="wrap_content"
+			android:layout_height="55sp"
 			android:text="!"
 			/>
 		<Button
 			android:id="@+id/die3"
 			android:layout_weight="1"
 			android:layout_width="100sp"
-			android:layout_height="wrap_content"
+			android:layout_height="55sp"
 			android:text="!"
 			/>
 		<Button
 			android:id="@+id/more"
 			android:layout_weight="1"
 			android:layout_width="70sp"
-			android:layout_height="wrap_content"
+			android:layout_height="55sp"
 			android:text="..."
 			/>
 	</LinearLayout>
