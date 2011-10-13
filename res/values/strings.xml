@@ -11,4 +11,7 @@
 
     <string name="log_empty">Push buttons to roll!\n\nLong-press buttons to configure dice.</string>
     <string name="roll_placeholder">Roll it!</string>
+
+    <string name="binary_no">no</string>
+    <string name="binary_yes">yes</string>
 </resources>

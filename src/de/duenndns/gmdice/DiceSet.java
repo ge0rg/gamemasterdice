@@ -17,6 +17,8 @@
 
 package de.duenndns.gmdice;
 
+import android.content.Context; // needed for translation strings
+
 import java.util.Random;
 
 /** DiceSet is the implementation of a set of dice
@@ -30,9 +32,9 @@ import java.util.Random;
 public class DiceSet {
 	// 3D20 is special: three attribute probes together instead of a sum
 	public static final String DSA = "3D20";
-	public int count;
-	public int sides;
-	public int modifier;
+	int count;
+	int sides;
+	int modifier;
 	boolean dsa;
 
 	public DiceSet(int c, int s, int m) {
@@ -78,6 +80,11 @@ public class DiceSet {
 			return String.format("%dd%d%+d", count, sides, modifier);
 	}
 
+	public String roll1d2(Context ctx, Random gen) {
+		return ctx.getString((gen.nextInt(2) == 1) ?
+			R.string.binary_yes : R.string.binary_no);
+	}
+
 	public String roll3D20(Random gen) {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < count; i++) {
@@ -89,9 +96,11 @@ public class DiceSet {
 		return sb.toString();
 	}
 
-	public String roll(Random gen) {
+	public String roll(Context ctx, Random gen) {
 		if (dsa)
 			return roll3D20(gen);
+		else if (count == 1 && sides == 2 && modifier == 0)
+			return roll1d2(ctx, gen);
 
 		int result = 0;
 

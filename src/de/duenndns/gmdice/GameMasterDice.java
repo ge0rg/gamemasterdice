@@ -143,7 +143,7 @@ public class GameMasterDice extends ListActivity
 	}
 	
 	public void roll(DiceSet ds) {
-		String roll = ds.roll(generator);
+		String roll = ds.roll(this, generator);
 		dicecache.add(ds);
 
 		resultview.setText(roll);
