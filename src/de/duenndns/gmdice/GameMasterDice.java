@@ -19,12 +19,15 @@ package de.duenndns.gmdice;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.*;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -43,8 +46,9 @@ public class GameMasterDice extends ListActivity
 	int button_ids[] = { R.id.die0, R.id.die1, R.id.die2, R.id.die3 };
 	Button buttons[];
 	Button button_more;
+	int button_colors[] = { 0xfff0b0f0, 0xffc0c0f0, 0xffc0f0c0, 0xfff0c0c0, 0xffb0f0f0 };
 	TextView resultview;
-	ArrayAdapter<String> resultlog;
+	RollResultAdapter resultlog;
 	SharedPreferences prefs;
 
 	DiceSet button_cfg[] = {
@@ -71,11 +75,13 @@ public class GameMasterDice extends ListActivity
 			buttons[i] = (Button)findViewById(button_ids[i]);
 			buttons[i].setOnClickListener(this);
 			buttons[i].setOnLongClickListener(this);
+			buttons[i].getBackground().setColorFilter(button_colors[i], PorterDuff.Mode.MULTIPLY);
 		}
 		button_more = (Button)findViewById(R.id.more);
 		button_more.setOnClickListener(this);
+		button_more.getBackground().setColorFilter(button_colors[4], PorterDuff.Mode.MULTIPLY);
 		resultview = (TextView)findViewById(R.id.rollresult);
-		resultlog = new ArrayAdapter<String>(this, R.layout.view_log);
+		resultlog = new RollResultAdapter(this);
 		setListAdapter(resultlog);
 
 
@@ -133,16 +139,20 @@ public class GameMasterDice extends ListActivity
 		if (btn == button_more) {
 			selectDice(new DiceSet(), true, new OnDiceChange() {
 				public void onDiceChange(DiceSet ds) {
-					roll(ds);
+					roll(ds, button_colors[4]);
 				 }});
 		} else {
-			String diceVal = btn.getText().toString();
-			DiceSet ds = new DiceSet(diceVal);
-			roll(ds);
+			for (int i = 0; i < buttons.length; i++) {
+				if (buttons[i] == btn) {
+					String diceVal = btn.getText().toString();
+					DiceSet ds = new DiceSet(diceVal);
+					roll(ds, button_colors[i]);
+				}
+			}
 		}
 	}
 	
-	public void roll(DiceSet ds) {
+	public void roll(DiceSet ds, int color) {
 		String roll = ds.roll(this, generator);
 		dicecache.add(ds);
 
@@ -150,7 +160,7 @@ public class GameMasterDice extends ListActivity
 
 		String rolllog = ds.toString() + ": " + roll;
 		Log.d(TAG, "rolled: " + rolllog);
-		resultlog.add(rolllog);
+		resultlog.add(new RollResult(rolllog, color));
 	}
 
 	public boolean onLongClick(View view) {
@@ -239,4 +249,33 @@ public class GameMasterDice extends ListActivity
 
 abstract class OnDiceChange {
 	abstract public void onDiceChange(DiceSet ds);
+}
+
+// this class contains all the data needed to store the results of a single dice roll
+class RollResult {
+	String result;
+	int color;
+
+	RollResult(String res, int col) {
+		result = res;
+		color = col;
+	}
+
+	@Override
+	public String toString() {
+		return result;
+	}
+}
+
+class RollResultAdapter extends ArrayAdapter<RollResult> {
+
+	RollResultAdapter(Context ctx) {
+		super(ctx, R.layout.view_log);
+	}
+
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View res = super.getView(position, convertView, parent);
+		((TextView)res).setTextColor(getItem(position).color);
+		return res;
+	}
 }
