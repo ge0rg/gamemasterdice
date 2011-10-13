@@ -5,9 +5,9 @@
     <string name="ds_choose">Choose dice</string>
     <string name="ds_custom">More...</string>
     <string name="ds_config">Configure dice</string>
-    <string name="spin_count">Number of Dice</string>
+    <string name="spin_count">Number of dice</string>
     <string name="spin_sides">Sides on a die</string>
-    <string name="spin_modifier">Probe Modifier</string>
+    <string name="spin_modifier">Probe modifier</string>
 
     <string name="log_empty">Push buttons to roll!\n\nLong-press buttons to configure dice.</string>
     <string name="roll_placeholder">Roll it!</string>
