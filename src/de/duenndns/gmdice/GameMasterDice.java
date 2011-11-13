@@ -184,9 +184,15 @@ public class GameMasterDice extends ListActivity
 	static final Integer[] SPIN_MODIFIER = { -10, -9, -8, -7, -6, -5, -4, -3, -2, -1,
 						0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
+	NumberPicker setupNumPicker(View group, int r_id, int defVal) {
+		NumberPicker sp = (NumberPicker)group.findViewById(r_id);
+		sp.setCurrent(defVal);
+		return sp;
+	}
+
 	Spinner setupSpinner(View group, int r_id, Integer[] values, int defVal) {
 		Spinner sp = (Spinner)group.findViewById(r_id);
-		ArrayAdapter adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, values);
+		ArrayAdapter adapter = new ArrayAdapter<Integer>(this, R.layout.spinner_item, values);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(adapter);
 		for (int i = 0; i < values.length; i++) {
@@ -202,9 +208,9 @@ public class GameMasterDice extends ListActivity
 		android.view.LayoutInflater inflater = (android.view.LayoutInflater)getSystemService(
 			      LAYOUT_INFLATER_SERVICE);
 		View group = inflater.inflate(R.layout.dg_configure, null, false);
-		final Spinner sp_c = setupSpinner(group, R.id.spin_count, SPIN_COUNT, defaults.count);
+		final NumberPicker np_c = setupNumPicker(group, R.id.spin_count, defaults.count);
 		final Spinner sp_s = setupSpinner(group, R.id.spin_sides, SPIN_SIDES, defaults.sides);
-		final Spinner sp_m = setupSpinner(group, R.id.spin_modifier, SPIN_MODIFIER, defaults.modifier);
+		final NumberPicker np_m = setupNumPicker(group, R.id.spin_modifier, defaults.modifier);
 
 		new AlertDialog.Builder(this)
 			.setTitle(R.string.ds_config)
@@ -212,9 +218,9 @@ public class GameMasterDice extends ListActivity
 			.setPositiveButton(android.R.string.ok,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
-						DiceSet ds = new DiceSet((Integer)sp_c.getSelectedItem(),
+						DiceSet ds = new DiceSet(np_c.getCurrent(),
 							(Integer)sp_s.getSelectedItem(),
-							(Integer)sp_m.getSelectedItem());
+							(Integer)np_m.getCurrent());
 						onOk.onDiceChange(ds);
 					}
 				})
