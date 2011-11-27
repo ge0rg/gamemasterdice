@@ -22,13 +22,18 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.*;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -96,6 +101,7 @@ public class GameMasterDice extends ListActivity
 		loadDicePrefs();
 		for (int i = 0; i < button_ids.length; i++)
 			buttons[i].setText(button_cfg[i].toString());
+		configKeepScreenOn();
 	}
 
 	@Override
@@ -110,6 +116,68 @@ public class GameMasterDice extends ListActivity
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
+	// Options menu
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main_context, menu);
+		return true;
+	}
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		MenuItem item = menu.findItem(R.id.screen_on);
+		if (item == null)
+			return false;
+		item.setIcon(prefs.getBoolean("keepscreen", false) ?
+			android.R.drawable.button_onoff_indicator_on :
+			android.R.drawable.button_onoff_indicator_off);
+		return true;
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.screen_on:
+			toggleKeepScreenOn();
+			return true;
+		case R.id.clear_log:
+			resultlog.clear();
+			resultview.setText(R.string.roll_placeholder);
+			return true;
+		case R.id.about:
+			aboutDialog();
+			return true;
+		}
+		return false;
+	}
+	void configKeepScreenOn() {
+		if (prefs.getBoolean("keepscreen", false)) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		} else {
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
+	}
+	void toggleKeepScreenOn() {
+		boolean new_state = !prefs.getBoolean("keepscreen", false);
+		prefs.edit().putBoolean("keepscreen", new_state).commit();
+		configKeepScreenOn();
+	}
+	void aboutDialog() {
+		String versionTitle = getString(R.string.app_name_long);
+		try {
+			PackageInfo pi = getPackageManager()
+						.getPackageInfo(getPackageName(), 0);
+			versionTitle += " " + pi.versionName;
+		} catch (NameNotFoundException e) {
+		}
+		String about = getString(R.string.about_text) + getString(R.string.about_gpl);
+		new AlertDialog.Builder(this)
+			.setTitle(versionTitle)
+			.setIcon(android.R.drawable.ic_dialog_info)
+			.setMessage(about)
+			.setPositiveButton(android.R.string.ok, null)
+			.create().show();
+	}
+
+	// preferences
 	void loadDicePrefs() {
 		String btn_str = prefs.getString("buttons", null);
 		if (btn_str == null)
@@ -121,7 +189,6 @@ public class GameMasterDice extends ListActivity
 		}
 		dicecache.loadFromString(prefs.getString("cache", null));
 	}
-
 	void storeDicePrefs() {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < button_cfg.length; i++) {
@@ -134,6 +201,7 @@ public class GameMasterDice extends ListActivity
 			.commit();
 	}
 
+	// OnClickListener callback for dice button clicks
 	public void onClick(View view) {
 		Button btn = (Button)view;
 		if (btn == button_more) {
@@ -163,6 +231,7 @@ public class GameMasterDice extends ListActivity
 		resultlog.add(new RollResult(rolllog, color));
 	}
 
+	// OnLongClickListener callback for dice reconfiguration
 	public boolean onLongClick(View view) {
 		final Button btn = (Button)view;
 		Log.d(TAG, "onLongClicked " + btn);

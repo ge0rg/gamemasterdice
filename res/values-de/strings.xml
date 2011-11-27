@@ -14,4 +14,8 @@
 
     <string name="binary_no">nein</string>
     <string name="binary_yes">ja</string>
+
+    <string name="menu_screen_on">Bildschirm anlassen</string>
+    <string name="menu_clear_log">Verlauf löschen</string>
+    <string name="menu_about">Über...</string>
 </resources>
