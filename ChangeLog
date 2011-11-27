@@ -1,3 +1,9 @@
+0.1.5:
+ * new options menu:
+ * keep screen on
+ * clear log
+ * about dialog
+
 0.1.4:
  * redesigned dice dialog
 
