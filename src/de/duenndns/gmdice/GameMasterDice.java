@@ -21,10 +21,12 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -174,6 +176,13 @@ public class GameMasterDice extends ListActivity
 			.setIcon(android.R.drawable.ic_dialog_info)
 			.setMessage(about)
 			.setPositiveButton(android.R.string.ok, null)
+			.setNeutralButton(R.string.about_home, 
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							startActivity(new Intent(Intent.ACTION_VIEW,
+									Uri.parse("https://github.com/ge0rg/gamemasterdice/wiki")));
+						}
+					})
 			.create().show();
 	}
 

@@ -18,4 +18,6 @@
     <string name="menu_screen_on">Bildschirm anlassen</string>
     <string name="menu_clear_log">Verlauf löschen</string>
     <string name="menu_about">Über...</string>
+
+    <string name="about_home">Homepage</string>
 </resources>
