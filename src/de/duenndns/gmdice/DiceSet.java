@@ -119,6 +119,8 @@ public class DiceSet {
 			} else {
 				sb.append("0");
 			}
+			if (i < count-1)
+			    sb.append(" ");
 		}
 		if (total > 0)
 			sb.append(" = +");

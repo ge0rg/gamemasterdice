@@ -53,6 +53,8 @@ public class DiceCache {
 		}
 		if (!except.contains(new DiceSet(DiceSet.DSA)))
 			list.add(DiceSet.DSA);
+		if (!except.contains(new DiceSet(DiceSet.FUDGE)))
+			list.add(DiceSet.FUDGE);
 	}
 
 	public String toString() {
