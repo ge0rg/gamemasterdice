@@ -29,16 +29,22 @@ public class DiceCache {
 	public DiceCache(int cnt) {
 		count = cnt;
 		dscache = new ArrayList<DiceSet>();
-		dscache.add(new DiceSet("1d2"));
-		dscache.add(new DiceSet("1d6"));
-		dscache.add(new DiceSet("1d6+1"));
-		dscache.add(new DiceSet("1d10"));
-		dscache.add(new DiceSet("1d20"));
+		dscache.add(DiceSet.getDiceSet("1d2"));
+		dscache.add(DiceSet.getDiceSet("1d6"));
+		dscache.add(DiceSet.getDiceSet("1d6+1"));
+		dscache.add(DiceSet.getDiceSet("1d10"));
+		dscache.add(DiceSet.getDiceSet("1d20"));
+	}
+
+	public void add(FUDGEDiceSet ds) {
+		return;
+	}
+
+	public void add(DSADiceSet ds) {
+		return;
 	}
 
 	public void add(DiceSet ds) {
-		if (ds.dsa)
-			return;
 		// flush entry to list start
 		dscache.remove(ds);
 		dscache.add(0, ds);
@@ -51,9 +57,9 @@ public class DiceCache {
 			if (!except.contains(i))
 				list.add(i.toString());
 		}
-		if (!except.contains(new DiceSet(DiceSet.DSA)))
+		if (!except.contains(DiceSet.getDiceSet(DiceSet.DSA)))
 			list.add(DiceSet.DSA);
-		if (!except.contains(new DiceSet(DiceSet.FUDGE)))
+		if (!except.contains(DiceSet.getDiceSet(DiceSet.FUDGE)))
 			list.add(DiceSet.FUDGE);
 	}
 
@@ -73,7 +79,7 @@ public class DiceCache {
 		dscache.clear();
 		for (String v : values) {
 			if (v.length() > 0)
-				dscache.add(new DiceSet(v));
+				dscache.add(DiceSet.getDiceSet(v));
 		}
 	}
 }
