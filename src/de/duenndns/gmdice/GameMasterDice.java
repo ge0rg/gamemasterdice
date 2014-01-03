@@ -59,10 +59,10 @@ public class GameMasterDice extends ListActivity
 	SharedPreferences prefs;
 
 	DiceSet button_cfg[] = {
-		new DiceSet(DiceSet.DSA),
-		new DiceSet(1, 20, 0),
-		new DiceSet(1, 6, 0),
-		new DiceSet(1, 6, 4)
+		new DiceSet.getDiceSet(DiceSet.DSA),
+		new DiceSet.getDiceSet(1, 20, 0),
+		new DiceSet.getDiceSet(1, 6, 0),
+		new DiceSet.getDiceSet(1, 6, 4)
 	};
 	DiceCache dicecache = new DiceCache(10);
 	Random generator = new Random();
@@ -194,7 +194,7 @@ public class GameMasterDice extends ListActivity
 		String[] btn_dice = btn_str.split("\\|");
 		for (int i = 0; i < btn_dice.length; i++) {
 			Log.d(TAG, "load: " + btn_dice[i]);
-			button_cfg[i] = new DiceSet(btn_dice[i]);
+			button_cfg[i] = DiceSet.getDiceSet(btn_dice[i]);
 		}
 		dicecache.loadFromString(prefs.getString("cache", null));
 	}
@@ -214,7 +214,7 @@ public class GameMasterDice extends ListActivity
 	public void onClick(View view) {
 		Button btn = (Button)view;
 		if (btn == button_more) {
-			selectDice(new DiceSet(), true, new OnDiceChange() {
+			selectDice(DiceSet.getDiceSet(), true, new OnDiceChange() {
 				public void onDiceChange(DiceSet ds) {
 					roll(ds, button_colors[4]);
 				 }});
@@ -222,7 +222,7 @@ public class GameMasterDice extends ListActivity
 			for (int i = 0; i < buttons.length; i++) {
 				if (buttons[i] == btn) {
 					String diceVal = btn.getText().toString();
-					DiceSet ds = new DiceSet(diceVal);
+					DiceSet ds = DiceSet.getDiceSet(diceVal);
 					roll(ds, button_colors[i]);
 				}
 			}
@@ -245,7 +245,7 @@ public class GameMasterDice extends ListActivity
 		final Button btn = (Button)view;
 		Log.d(TAG, "onLongClicked " + btn);
 		String diceVal = btn.getText().toString();
-		selectDice(new DiceSet(diceVal), false, new OnDiceChange() {
+		selectDice(DiceSet.getDiceSet(diceVal), false, new OnDiceChange() {
 			public void onDiceChange(DiceSet ds) {
 				btn.setText(ds.toString());
 				// store button config
@@ -296,7 +296,7 @@ public class GameMasterDice extends ListActivity
 			.setPositiveButton(android.R.string.ok,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
-						DiceSet ds = new DiceSet(np_c.getCurrent(),
+						DiceSet ds = DiceSet.getDiceSet(np_c.getCurrent(),
 							(Integer)sp_s.getSelectedItem(),
 							(Integer)np_m.getCurrent());
 						onOk.onDiceChange(ds);
@@ -323,7 +323,7 @@ public class GameMasterDice extends ListActivity
 						if (which == adapter.getCount() - 1)
 							configureDice(defaults, onOk);
 						else
-							onOk.onDiceChange(new DiceSet(ds));
+							onOk.onDiceChange(DiceSet.getDiceSet(ds));
 					}
 				})
 			.setNegativeButton(android.R.string.cancel, null)
