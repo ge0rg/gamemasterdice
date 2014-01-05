@@ -39,18 +39,21 @@ public abstract class DiceSet {
 	int modifier;
 
 	public static DiceSet getDiceSet(int c, int s, int m) {
-		return StandardDiceSet(c, s, m);
+		return new StandardDiceSet(c, s, m);
 	}
 
 	public static DiceSet getDiceSet() {
-		return StandardDiceSet(1, 6, 0);
+		return new StandardDiceSet(1, 6, 0);
 	}
 
 	public static DiceSet getDiceSet(String set) {
+		int c;
+		int s;
+		int m;
 		if (set.equals(DSA)) {
-			return DSADiceSet();
+			return new DSADiceSet();
 		} else if (set.equals(FUDGE)) {
-			return FUDGEDiceSet();
+			return new FUDGEDiceSet();
 		} else {
 			try {
 				String[] parts = set.split("[d+-]");
@@ -60,9 +63,11 @@ public abstract class DiceSet {
 					m = Integer.parseInt(parts[2]);
 					if (set.indexOf('-') >= 0)
 						m = -m;
+				} else {
+					m = 0;
 				}
 				if (c == 1 && s == 2 && m == 0)
-					return Coin();
+					return new Coin();
 				else
 					return getDiceSet(c, s, m);
 			} catch (IndexOutOfBoundsException e) {

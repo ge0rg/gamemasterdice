@@ -32,7 +32,7 @@ public class Coin extends DiceSet {
 		return "1d2";
 	}
 
-	public roll(Context ctx, Random gen) {
+	public String roll(Context ctx, Random gen) {
 		return ctx.getString((gen.nextInt(2) == 1) ?
 			R.string.binary_yes : R.string.binary_no);
 	}

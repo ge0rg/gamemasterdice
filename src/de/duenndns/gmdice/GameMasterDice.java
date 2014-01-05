@@ -59,10 +59,10 @@ public class GameMasterDice extends ListActivity
 	SharedPreferences prefs;
 
 	DiceSet button_cfg[] = {
-		new DiceSet.getDiceSet(DiceSet.DSA),
-		new DiceSet.getDiceSet(1, 20, 0),
-		new DiceSet.getDiceSet(1, 6, 0),
-		new DiceSet.getDiceSet(1, 6, 4)
+		DiceSet.getDiceSet(DiceSet.DSA),
+		DiceSet.getDiceSet(1, 20, 0),
+		DiceSet.getDiceSet(1, 6, 0),
+		DiceSet.getDiceSet(1, 6, 4)
 	};
 	DiceCache dicecache = new DiceCache(10);
 	Random generator = new Random();

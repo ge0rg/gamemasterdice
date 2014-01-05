@@ -23,7 +23,7 @@ import java.util.Random;
 
 public class DSADiceSet extends DiceSet {
 
-	public void DSADiceSet() {
+	public DSADiceSet() {
 		count = 3;
 		sides = 20;
 		modifier = 0;
@@ -45,6 +45,6 @@ public class DSADiceSet extends DiceSet {
 	}
 
 	public int hashCode() {
-		return 1000000 + super();
+		return 1032000;
 	}
 }

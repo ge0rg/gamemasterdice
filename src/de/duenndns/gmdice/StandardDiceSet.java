@@ -21,9 +21,9 @@ import android.content.Context; // needed for translation strings
 
 import java.util.Random;
 
-public class StandardDiceSet {
+public class StandardDiceSet extends DiceSet {
 
-	public void StandardDiceSet(int c, int s, int m) {
+	public StandardDiceSet(int c, int s, int m) {
 		count = c;
 		sides = s;
 		modifier = m;

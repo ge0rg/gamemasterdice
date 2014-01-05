@@ -21,43 +21,45 @@ import android.content.Context; // needed for translation strings
 
 import java.util.Random;
 
-public class FUDGEDiceSet {
+public class FUDGEDiceSet extends DiceSet {
 
-    public FUDGEDiceSet() {
-	count = 4;
-	sides = 3; // The purist in me wants 6, but there's no good reason to.
-	modifier = 0;
-    }
-
-    public String roll(Context ctx, Random gen) {
-	StringBuilder sb = new StringBuilder();
-	int total;
-	total = 0;
-	for (int i = 0; i < count; i++) {
-	    int roll1 = gen.nextInt(sides) + 1;
-	    if (roll1 == 1) {
-		sb.append("-");
-		total--;
-	    } else if (roll1 == 3) {
-		sb.append("+");
-		total++;
-	    } else {
-		sb.append("0");
-	    }
-	    if (i < count-1)
-		sb.append(" ");
+	public FUDGEDiceSet() {
+		count = 4;
+		sides = 3; // The purist in me wants 6, but there's no good reason to.
+		modifier = 0;
 	}
-	if (total > 0)
-	    sb.append(" = +");
-	else
-	    sb.append(" = ");
-	sb.append(total);
-	return sb.toString();
-    }
 
-    public String toString()
-	return FUDGE;
+	public String roll(Context ctx, Random gen) {
+		StringBuilder sb = new StringBuilder();
+		int total;
+		total = 0;
+		for (int i = 0; i < count; i++) {
+			int roll1 = gen.nextInt(sides) + 1;
+			if (roll1 == 1) {
+				sb.append("-");
+				total--;
+			} else if (roll1 == 3) {
+				sb.append("+");
+				total++;
+			} else {
+				sb.append("0");
+			}
+			if (i < count-1)
+				sb.append(" ");
+		}
+		if (total > 0)
+			sb.append(" = +");
+		else
+			sb.append(" = ");
+		sb.append(total);
+		return sb.toString();
+	}
 
-    public int hashCode()
-	return 10000000 + super();
+	public String toString() {
+		return FUDGE;
+	}
+
+	public int hashCode() {
+		return 10040300;
+	}
 }
