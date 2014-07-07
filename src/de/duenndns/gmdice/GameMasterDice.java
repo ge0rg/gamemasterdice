@@ -358,7 +358,7 @@ class RollResult {
 
 	public void showDetails(Context ctx) {
 		new AlertDialog.Builder(ctx)
-			.setTitle("Roll Result")
+			.setTitle(R.string.roll_result)
 			.setMessage(result)
 			.setPositiveButton(android.R.string.ok, null)
 			.create().show();
