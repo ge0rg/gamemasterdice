@@ -133,8 +133,8 @@ public class GameMasterDice extends ListActivity
 		if (item == null)
 			return false;
 		item.setIcon(prefs.getBoolean("keepscreen", false) ?
-			android.R.drawable.button_onoff_indicator_on :
-			android.R.drawable.button_onoff_indicator_off);
+			R.drawable.ic_action_brightness_high :
+			R.drawable.ic_action_brightness_low);
 		return true;
 	}
 	@Override
@@ -159,6 +159,7 @@ public class GameMasterDice extends ListActivity
 		} else {
 			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
+		invalidateOptionsMenu();
 	}
 	void toggleKeepScreenOn() {
 		boolean new_state = !prefs.getBoolean("keepscreen", false);
