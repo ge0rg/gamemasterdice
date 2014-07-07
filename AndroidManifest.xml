@@ -7,7 +7,7 @@
     <uses-sdk android:targetSdkVersion="8" android:minSdkVersion="3"/>
 
     <application android:label="@string/app_name" android:icon="@drawable/logo" >
-        <activity android:name="GameMasterDice"
+        <activity android:name=".GameMasterDice"
                   android:configChanges="orientation|keyboardHidden"
                   android:label="@string/app_name">
             <intent-filter>

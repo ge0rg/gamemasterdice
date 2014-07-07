@@ -39,6 +39,7 @@ import android.view.View.*;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -330,6 +331,11 @@ public class GameMasterDice extends ListActivity
 			.setNegativeButton(android.R.string.cancel, null)
 			.create().show();
 	}
+
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		resultlog.getItem(position).showDetails(this);
+	}
 }
 
 abstract class OnDiceChange {
@@ -344,6 +350,18 @@ class RollResult {
 	RollResult(String res, int col) {
 		result = res;
 		color = col;
+	}
+
+	public void setColor(int col) {
+		color = col;
+	}
+
+	public void showDetails(Context ctx) {
+		new AlertDialog.Builder(ctx)
+			.setTitle("Roll Result")
+			.setMessage(result)
+			.setPositiveButton(android.R.string.ok, null)
+			.create().show();
 	}
 
 	@Override
