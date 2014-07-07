@@ -6,4 +6,6 @@
 	android:textColor="#b0b0b0"
 	android:textSize="22sp"
 	android:padding="5sp"
+	android:singleLine="true"
+	android:ellipsize="middle"
 	/>

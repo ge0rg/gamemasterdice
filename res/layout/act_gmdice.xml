@@ -27,6 +27,8 @@
 		android:textColor="#c0c090"
 		android:textSize="40sp"
 		android:gravity="center"
+		android:singleLine="true"
+		android:ellipsize="middle"
 		/>
 	<LinearLayout
 		android:orientation="horizontal"
