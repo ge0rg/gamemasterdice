@@ -4,7 +4,7 @@
       android:versionCode="7"
       android:versionName="0.1.6">
 
-    <uses-sdk android:targetSdkVersion="8" android:minSdkVersion="3"/>
+    <uses-sdk android:targetSdkVersion="11" android:minSdkVersion="11"/>
 
     <application android:label="@string/app_name" android:icon="@drawable/logo" >
         <activity android:name=".GameMasterDice"
