@@ -260,7 +260,7 @@ public class GameMasterDice extends ListActivity
 	}
 
 	static final Integer[] SPIN_COUNT = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-	static final Integer[] SPIN_SIDES = { 2, 3, 4, 6, 8, 10, 12, 20, 100 };
+	static final Integer[] SPIN_SIDES = { 2, 3, 4, 6, 8, 10, 12, 20, 30, 100 };
 	static final Integer[] SPIN_MODIFIER = { -10, -9, -8, -7, -6, -5, -4, -3, -2, -1,
 						0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
