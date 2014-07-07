@@ -1,3 +1,8 @@
+0.1.6:
+ * new FUDGE/FATE dice (4dF) by David Pflug
+ * added d30 dice
+ * improved display of long rolls (i.e. 999d100), tap on log entry for full result
+
 0.1.5:
  * new options menu:
  * keep screen on
