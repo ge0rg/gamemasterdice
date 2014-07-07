@@ -7,11 +7,8 @@
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent">
 
-		<de.duenndns.gmdice.NumberPicker
+		<NumberPicker
 		        android:id="@+id/spin_count"
-			np:startRange="1"
-			np:endRange="999"
-			np:wrap="false"
 			android:layout_weight="1"
 			android:layout_width="10dp"
 			android:layout_height="wrap_content" />
@@ -33,11 +30,8 @@
 			android:textSize="24sp"
 			android:text="±" />
 
-		<de.duenndns.gmdice.NumberPicker
+		<NumberPicker
 		        android:id="@+id/spin_modifier"
-			np:startRange="-999"
-			np:endRange="999"
-			np:wrap="false"
 			android:layout_weight="1"
 			android:layout_width="10dp"
 			android:layout_height="wrap_content" />
