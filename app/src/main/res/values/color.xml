@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ColorPrimary">#2196f3</color>
+    <color name="ColorPrimaryDark">#2196f3</color>
+
+    <color name="blue_light">#90caf9</color>
+    <color name="blue_light_pressed">#bbdefb</color>
+
+    <color name="blue">#2196f3</color>
+    <color name="blue_pressed">#64b5f6</color>
+
+    <color name="label_background">#7F000000</color>
+    <color name="label_text">#ffffff</color>
+
+    <color name="black_semi_transparent">#B2000000</color>
+    <color name="background">#e5e5e5</color>
+    <color name="half_black">#808080</color>
+    <color name="white">#fafafa</color>
+    <color name="white_pressed">#f1f1f1</color>
+    <color name="pink">#e91e63</color>
+    <color name="pink_pressed">#ec407a</color>
+    <color name="blue_semi_transparent">#82b1ff</color>
+    <color name="blue_semi_transparent_pressed">#448aff</color>
+
+
+</resources>
