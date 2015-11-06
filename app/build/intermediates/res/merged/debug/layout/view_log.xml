@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/logtext"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:textColor="#b0b0b0"
+	android:textSize="22sp"
+	android:padding="5sp"
+	android:singleLine="true"
+	android:ellipsize="middle"
+	/>
+<!-- From: file:/home/juergen/Projekte/Android/Android_Studio/gamemasterdice/app/src/main/res/layout/view_log.xml -->
