@@ -183,7 +183,7 @@ public class GameMasterDice extends ListActivity implements OnClickListener, OnL
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
 							startActivity(new Intent(Intent.ACTION_VIEW,
-									Uri.parse("https://github.com/ge0rg/gamemasterdice/wiki")));
+									Uri.parse("https://github.com/scoute-dich/gamemasterdice")));
 						}
 					})
 			.create().show();

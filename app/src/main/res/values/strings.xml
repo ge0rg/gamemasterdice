@@ -20,7 +20,11 @@
     <string name="menu_clear_log">Clear log</string>
     <string name="menu_about">About...</string>
 
-    <string name="about_text">Copyright © 2011 Georg Lukas &lt;georg@op-co.de&gt;\n
+    <string name="about_text">Copyright © 2015 Baumann Produktion\n\n
+
+        This App is a fork from *gamemasterdice*, which is developed by Georg Lukas. You can find the
+        original project at *https://github.com/ge0rg/gamemasterdice*. I switched to material
+        design, added a dice, changed the app name and did some minor changes.\n
     	\n
 	</string>
     <string name="about_gpl">This program is free software; you can redistribute it and/or

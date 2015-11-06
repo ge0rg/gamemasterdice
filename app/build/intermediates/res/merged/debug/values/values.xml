@@ -355,7 +355,11 @@
 	http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 	</string>
     <string name="about_home">Home Page</string>
-    <string name="about_text">Copyright © 2011 Georg Lukas &lt;georg@op-co.de>\n
+    <string name="about_text">Copyright © 2015 Baumann Produktion\n\n
+
+        This App is a fork from *gamemasterdice*, which is developed by Georg Lukas. You can find the
+        original project at *https://github.com/ge0rg/gamemasterdice*. I switched to material
+        design, added a dice, changed the app name and did some minor changes.\n
     	\n
 	</string>
     <string name="app_name">DSA Dice</string>
