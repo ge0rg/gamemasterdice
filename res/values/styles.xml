@@ -1,0 +1,7 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<resources>
+    <color name="primaryButtonColor">#000000</color> <!-- placeholder, not actually used -->
+
+    <style name="GMTheme" parent="android:Theme.Holo">
+    </style>
+</resources>

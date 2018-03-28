@@ -28,6 +28,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.PorterDuff;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -40,7 +41,6 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -77,7 +77,6 @@ public class GameMasterDice extends ListActivity
 		setContentView(R.layout.act_gmdice);
 		setTitle(R.string.app_name_long);
 
-
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		buttons = new Button[button_ids.length];
@@ -87,11 +86,15 @@ public class GameMasterDice extends ListActivity
 			buttons[i].setOnLongClickListener(this);
 			buttons[i].setTransformationMethod(null); // work around r21+ applying ALLCAPS
 			buttons[i].getBackground().setColorFilter(button_colors[i], PorterDuff.Mode.MULTIPLY);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+				buttons[i].setTextColor(getResources().getColor(R.color.primaryButtonColor));
 		}
 		button_more = (Button)findViewById(R.id.more);
 		button_more.setOnClickListener(this);
 		button_more.setOnLongClickListener(this);
 		button_more.getBackground().setColorFilter(button_colors[4], PorterDuff.Mode.MULTIPLY);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+			button_more.setTextColor(getResources().getColor(R.color.primaryButtonColor));
 		resultview = (TextView)findViewById(R.id.rollresult);
 		resultlog = new RollResultAdapter(this);
 		setListAdapter(resultlog);
