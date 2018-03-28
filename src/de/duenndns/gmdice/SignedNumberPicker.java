@@ -13,7 +13,7 @@ import android.widget.NumberPicker;
 
 // Work around android NumberPicker freaking out on negative values
 // https://stackoverflow.com/a/49499143/539443
-class SignedNumberPicker extends NumberPicker {
+public class SignedNumberPicker extends NumberPicker {
 	int nToAdd=0,mMaxValue=0,mMinValue=0;
 	EditText tv;
 	private void init() {
