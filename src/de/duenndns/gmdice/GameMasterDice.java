@@ -250,7 +250,7 @@ public class GameMasterDice extends ListActivity
 		final Button btn = (Button)view;
 		Log.d(TAG, "onLongClicked " + btn);
 		String diceVal = btn.getText().toString();
-		selectDice(DiceSet.getDiceSet(diceVal), false, new OnDiceChange() {
+		configureDice(DiceSet.getDiceSet(diceVal), new OnDiceChange() {
 			public void onDiceChange(DiceSet ds) {
 				btn.setText(ds.toString());
 				// store button config
@@ -293,7 +293,7 @@ public class GameMasterDice extends ListActivity
 	}
 
 	// create a DiceSet by setting count, sides, modifier
-	void configureDice(DiceSet defaults, final OnDiceChange onOk) {
+	void configureDice(final DiceSet defaults, final OnDiceChange onOk) {
 		android.view.LayoutInflater inflater = (android.view.LayoutInflater)getSystemService(
 			      LAYOUT_INFLATER_SERVICE);
 		View group = inflater.inflate(R.layout.dg_configure, null, false);
@@ -312,6 +312,12 @@ public class GameMasterDice extends ListActivity
 							(Integer)np_m.getRealValue());
 						Log.d(TAG, "OK clicked: " + ds);
 						onOk.onDiceChange(ds);
+					}
+				})
+			.setNeutralButton(R.string.ds_custom,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						selectDice(defaults, false, onOk);
 					}
 				})
 			.setNegativeButton(android.R.string.cancel, null)
