@@ -42,7 +42,7 @@ play {
 }
 
 android {
-	compileSdkVersion 11
+	compileSdkVersion 27
 	buildToolsVersion "25.0.0"
 	playAccountConfigs {
 		defaultAccountConfig {
@@ -51,7 +51,7 @@ android {
 	}
 	defaultConfig {
 		minSdkVersion 11
-		targetSdkVersion 21
+		targetSdkVersion 27
 		versionName "$build_revision"
 		playAccountConfig = playAccountConfigs.defaultAccountConfig
 	}
