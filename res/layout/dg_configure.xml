@@ -7,7 +7,7 @@
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent">
 
-		<NumberPicker
+		<de.duenndns.gmdice.SignedNumberPicker
 		        android:id="@+id/spin_count"
 			android:layout_weight="1"
 			android:layout_width="10dp"
@@ -30,7 +30,7 @@
 			android:textSize="24sp"
 			android:text="±" />
 
-		<NumberPicker
+		<de.duenndns.gmdice.SignedNumberPicker
 		        android:id="@+id/spin_modifier"
 			android:layout_weight="1"
 			android:layout_width="10dp"

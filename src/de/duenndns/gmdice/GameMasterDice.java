@@ -266,8 +266,11 @@ public class GameMasterDice extends ListActivity
 	static final Integer[] SPIN_MODIFIER = { -10, -9, -8, -7, -6, -5, -4, -3, -2, -1,
 						0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
-	NumberPicker setupNumPicker(View group, int r_id, int minVal, int maxVal, int defVal) {
-		NumberPicker sp = (NumberPicker)group.findViewById(r_id);
+	// Work around android NumberPicker freaking out on negative values
+	// https://stackoverflow.com/a/49499143/539443
+	SignedNumberPicker setupNumPicker(View group, int r_id, int minVal, int maxVal, int defVal) {
+		SignedNumberPicker sp = (SignedNumberPicker)group.findViewById(r_id);
+		Log.d(TAG, "NP init: " + minVal + " <= " + defVal + " <= " + maxVal);
 		sp.setMinValue(minVal);
 		sp.setMaxValue(maxVal);
 		sp.setValue(defVal);
@@ -293,9 +296,9 @@ public class GameMasterDice extends ListActivity
 		android.view.LayoutInflater inflater = (android.view.LayoutInflater)getSystemService(
 			      LAYOUT_INFLATER_SERVICE);
 		View group = inflater.inflate(R.layout.dg_configure, null, false);
-		final NumberPicker np_c = setupNumPicker(group, R.id.spin_count, 1, 999, defaults.count);
+		final SignedNumberPicker np_c = setupNumPicker(group, R.id.spin_count, 1, 999, defaults.count);
 		final Spinner sp_s = setupSpinner(group, R.id.spin_sides, SPIN_SIDES, defaults.sides);
-		final NumberPicker np_m = setupNumPicker(group, R.id.spin_modifier, -999, 999, defaults.modifier);
+		final SignedNumberPicker np_m = setupNumPicker(group, R.id.spin_modifier, -999, 999, defaults.modifier);
 
 		new AlertDialog.Builder(this)
 			.setTitle(R.string.ds_config)
@@ -303,9 +306,10 @@ public class GameMasterDice extends ListActivity
 			.setPositiveButton(android.R.string.ok,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
-						DiceSet ds = DiceSet.getDiceSet(np_c.getValue(),
+						DiceSet ds = DiceSet.getDiceSet(np_c.getRealValue(),
 							(Integer)sp_s.getSelectedItem(),
-							(Integer)np_m.getValue());
+							(Integer)np_m.getRealValue());
+						Log.d(TAG, "OK clicked: " + ds);
 						onOk.onDiceChange(ds);
 					}
 				})
