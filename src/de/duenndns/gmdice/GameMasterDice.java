@@ -271,7 +271,7 @@ public class GameMasterDice extends ListActivity
 	}
 
 	static final Integer[] SPIN_COUNT = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-	static final Integer[] SPIN_SIDES = { 2, 3, 4, 6, 8, 10, 12, 20, 30, 100 };
+	static final String[] SPIN_SIDES = { "F", "2", "3", "4", "6", "8", "10", "12", "20", "30", "100" };
 	static final Integer[] SPIN_MODIFIER = { -10, -9, -8, -7, -6, -5, -4, -3, -2, -1,
 						0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
@@ -287,13 +287,13 @@ public class GameMasterDice extends ListActivity
 		return sp;
 	}
 
-	Spinner setupSpinner(View group, int r_id, Integer[] values, int defVal) {
+	Spinner setupSpinner(View group, int r_id, String[] values, String defVal) {
 		Spinner sp = (Spinner)group.findViewById(r_id);
-		ArrayAdapter adapter = new ArrayAdapter<Integer>(this, R.layout.spinner_item, values);
+		ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, values);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(adapter);
 		for (int i = 0; i < values.length; i++) {
-			if (values[i] == defVal) {
+			if (values[i].equals(defVal)) {
 				sp.setSelection(i);
 			}
 		}
@@ -306,7 +306,8 @@ public class GameMasterDice extends ListActivity
 			      LAYOUT_INFLATER_SERVICE);
 		View group = inflater.inflate(R.layout.dg_configure, null, false);
 		final SignedNumberPicker np_c = setupNumPicker(group, R.id.spin_count, 1, 999, defaults.count);
-		final Spinner sp_s = setupSpinner(group, R.id.spin_sides, SPIN_SIDES, defaults.sides);
+		String sides = defaults.sides == DiceSet.FUDGE ? "F" :  Integer.toString(defaults.sides);
+		final Spinner sp_s = setupSpinner(group, R.id.spin_sides, SPIN_SIDES, sides);
 		final SignedNumberPicker np_m = setupNumPicker(group, R.id.spin_modifier, -999, 999, defaults.modifier);
 
 		new AlertDialog.Builder(this)
@@ -315,9 +316,11 @@ public class GameMasterDice extends ListActivity
 			.setPositiveButton(android.R.string.ok,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
-						DiceSet ds = DiceSet.getDiceSet(np_c.getRealValue(),
-							(Integer)sp_s.getSelectedItem(),
-							(Integer)np_m.getRealValue());
+						String selection = String.format("%dd%s%+d",
+							np_c.getRealValue(),
+							sp_s.getSelectedItem(),
+							np_m.getRealValue());
+						DiceSet ds = DiceSet.getDiceSet(selection);
 						Log.d(TAG, "OK clicked: " + ds);
 						onOk.onDiceChange(ds);
 					}
