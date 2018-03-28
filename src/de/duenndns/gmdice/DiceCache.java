@@ -53,6 +53,12 @@ public class DiceCache {
 			dscache.remove(count);
 	}
 
+	public DiceSet get(int index) {
+		if (index >= dscache.size())
+			return DiceSet.getDiceSet();
+		return dscache.get(index);
+	}
+
 	public void populate(android.widget.ArrayAdapter<CharSequence> list, List<DiceSet> except) {
 		for (DiceSet i : dscache) {
 			if (!except.contains(i))

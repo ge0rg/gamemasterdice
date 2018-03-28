@@ -90,6 +90,7 @@ public class GameMasterDice extends ListActivity
 		}
 		button_more = (Button)findViewById(R.id.more);
 		button_more.setOnClickListener(this);
+		button_more.setOnLongClickListener(this);
 		button_more.getBackground().setColorFilter(button_colors[4], PorterDuff.Mode.MULTIPLY);
 		resultview = (TextView)findViewById(R.id.rollresult);
 		resultlog = new RollResultAdapter(this);
@@ -248,7 +249,14 @@ public class GameMasterDice extends ListActivity
 	// OnLongClickListener callback for dice reconfiguration
 	public boolean onLongClick(View view) {
 		final Button btn = (Button)view;
-		Log.d(TAG, "onLongClicked " + btn);
+		Log.d(TAG, "onLongClicked " + btn.getText().toString());
+		if (btn == button_more) {
+			configureDice(dicecache.get(0), new OnDiceChange() {
+				public void onDiceChange(DiceSet ds) {
+					roll(ds, button_colors[4]);
+				}});
+			return true;
+		}
 		String diceVal = btn.getText().toString();
 		configureDice(DiceSet.getDiceSet(diceVal), new OnDiceChange() {
 			public void onDiceChange(DiceSet ds) {
