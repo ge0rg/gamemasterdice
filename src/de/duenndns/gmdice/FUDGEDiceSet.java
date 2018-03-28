@@ -24,10 +24,13 @@ import java.util.Random;
 
 public class FUDGEDiceSet extends DiceSet {
 
+	public FUDGEDiceSet(int c, int m) {
+		count = c;
+		sides = DiceSet.FUDGE; // The purist in me wants 6, but there's no good reason to.
+		modifier = m;
+	}
 	public FUDGEDiceSet() {
-		count = 4;
-		sides = 3; // The purist in me wants 6, but there's no good reason to.
-		modifier = 0;
+		this(4, 0);
 	}
 
 	public String roll(Context ctx, Random gen) {
@@ -35,7 +38,7 @@ public class FUDGEDiceSet extends DiceSet {
 		int total;
 		total = 0;
 		for (int i = 0; i < count; i++) {
-			int roll1 = gen.nextInt(sides) + 1;
+			int roll1 = gen.nextInt(3) + 1;
 			if (roll1 == 1) {
 				sb.append("-");
 				total--;
@@ -45,19 +48,22 @@ public class FUDGEDiceSet extends DiceSet {
 			} else {
 				sb.append("0");
 			}
-			if (i < count-1)
-				sb.append(" ");
+			sb.append(" ");
 		}
-		if (total > 0)
-			sb.append(" = +");
-		else
-			sb.append(" = ");
-		sb.append(total);
+		if (modifier != 0) {
+			sb.append(String.format("%+d ", modifier));
+			total += modifier;
+		}
+		sb.append("= ");
+		sb.append(String.format("%+d", total));
 		return sb.toString();
 	}
 
 	public String toString() {
-		return FUDGE;
+		if (modifier == 0)
+			return String.format("%ddF", count);
+		else
+			return String.format("%ddF%+d", count, modifier);
 	}
 
 	public int hashCode() {

@@ -34,7 +34,7 @@ public abstract class DiceSet {
 	// 3D20 is special: three attribute probes together instead of a sum
 	public static final String DSA = "3D20";
 	// FUDGE is special: showing +, 0, and - symbols
-	public static final String FUDGE = "4dF";
+	public static final int FUDGE = -1; // we cheat by defining that fudge dice have -1 sides
 	int count;
 	int sides;
 	int modifier;
@@ -53,13 +53,15 @@ public abstract class DiceSet {
 		int m;
 		if (set.equals(DSA)) {
 			return new DSADiceSet();
-		} else if (set.equals(FUDGE)) {
-			return new FUDGEDiceSet();
 		} else {
 			try {
 				String[] parts = set.split("[d+-]");
 				c = Integer.parseInt(parts[0]);
-				s = Integer.parseInt(parts[1]);
+				if (parts[1].equals("F")) {
+					s = FUDGE;
+				} else {
+					s = Integer.parseInt(parts[1]);
+				}
 				if (parts.length > 2) {
 					m = Integer.parseInt(parts[2]);
 					if (set.indexOf('-') >= 0)
@@ -69,6 +71,8 @@ public abstract class DiceSet {
 				}
 				if (c == 1 && s == 2 && m == 0)
 					return new Coin();
+				else if (s == FUDGE)
+					return new FUDGEDiceSet(c, m);
 				else
 					return getDiceSet(c, s, m);
 			} catch (IndexOutOfBoundsException e) {

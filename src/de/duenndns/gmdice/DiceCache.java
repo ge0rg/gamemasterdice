@@ -66,8 +66,8 @@ public class DiceCache {
 		}
 		if (!except.contains(DiceSet.getDiceSet(DiceSet.DSA)))
 			list.add(DiceSet.DSA);
-		if (!except.contains(DiceSet.getDiceSet(DiceSet.FUDGE)))
-			list.add(DiceSet.FUDGE);
+		if (!except.contains(DiceSet.getDiceSet("4dF")))
+			list.add("4dF");
 	}
 
 	public String toString() {
