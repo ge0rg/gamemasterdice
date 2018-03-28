@@ -1,5 +1,6 @@
 *~
 bin
+build
 gen
 local.properties
 *.swp
