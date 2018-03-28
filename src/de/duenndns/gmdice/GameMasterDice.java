@@ -85,6 +85,7 @@ public class GameMasterDice extends ListActivity
 			buttons[i] = (Button)findViewById(button_ids[i]);
 			buttons[i].setOnClickListener(this);
 			buttons[i].setOnLongClickListener(this);
+			buttons[i].setTransformationMethod(null); // work around r21+ applying ALLCAPS
 			buttons[i].getBackground().setColorFilter(button_colors[i], PorterDuff.Mode.MULTIPLY);
 		}
 		button_more = (Button)findViewById(R.id.more);
