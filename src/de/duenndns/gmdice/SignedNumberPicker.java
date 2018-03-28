@@ -33,7 +33,6 @@ class SignedNumberPicker extends NumberPicker {
 					tv.selectAll();
 				} else {
 					setValueFromEditText(tv);
-					tv.setVisibility(INVISIBLE);
 				}
 				if (mOnTextFocusChangedListener!=null) {
 					mOnTextFocusChangedListener.onTextFocusChanged(b);
@@ -56,6 +55,12 @@ class SignedNumberPicker extends NumberPicker {
 		super(context, attrs);
 		init();
 	}
+
+	public SignedNumberPicker(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		init();
+	}
+
 	@Override
 	public void addView(View child) {
 		super.addView(child);
@@ -111,7 +116,7 @@ class SignedNumberPicker extends NumberPicker {
 		}
 	}
 	public int getRealValue() {
-		if (tv.getVisibility() == VISIBLE)
+		if (tv.hasFocus())
 			setValueFromEditText(tv);
 		return super.getValue()-nToAdd;
 	}
