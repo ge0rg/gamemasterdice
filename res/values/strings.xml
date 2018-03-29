@@ -20,7 +20,7 @@
     <string name="menu_clear_log">Clear log</string>
     <string name="menu_about">About...</string>
 
-    <string name="about_text">Copyright © 2011 Georg Lukas &lt;georg@op-co.de&gt;\n
+    <string name="about_text">Copyright © 2011-2018 Georg Lukas &lt;georg@op-co.de&gt;\n
     	\n
 	</string>
     <string name="about_gpl">This program is free software; you can redistribute it and/or
