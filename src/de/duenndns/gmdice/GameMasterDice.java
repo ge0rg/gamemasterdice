@@ -58,7 +58,7 @@ public class GameMasterDice extends ListActivity
 	Button button_more;
 	int button_colors[] = { 0xfff0b0f0, 0xffc0c0f0, 0xffc0f0c0, 0xfff0c0c0, 0xffb0f0f0 };
 	TextView resultview;
-	RollResultAdapter resultlog;
+	static RollResultAdapter resultlog;
 	SharedPreferences prefs;
 
 	DiceSet button_cfg[] = {
@@ -96,7 +96,8 @@ public class GameMasterDice extends ListActivity
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
 			button_more.setTextColor(getResources().getColor(R.color.primaryButtonColor));
 		resultview = (TextView)findViewById(R.id.rollresult);
-		resultlog = new RollResultAdapter(this);
+		if (resultlog == null)
+			resultlog = new RollResultAdapter(getApplicationContext());
 		setListAdapter(resultlog);
 
 
