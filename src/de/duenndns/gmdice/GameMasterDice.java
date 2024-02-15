@@ -44,6 +44,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -68,7 +69,7 @@ public class GameMasterDice extends ListActivity
 		DiceSet.getDiceSet(1, 6, 4)
 	};
 	DiceCache dicecache = new DiceCache(10);
-	Random generator = new Random();
+	Random generator = new SecureRandom();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
