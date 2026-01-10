@@ -12,7 +12,7 @@
 		android:stackFromBottom="true"
 		android:transcriptMode="alwaysScroll"
 		/>
-	<TextView android:id="@+id/android:empty"
+	<TextView android:id="@android:id/empty"
 		android:layout_width="fill_parent"
 		android:layout_height="100sp"
 		android:layout_weight="1"
