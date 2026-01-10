@@ -8,6 +8,7 @@
     <color name="background">#101810</color>
 
     <style name="GMTheme" parent="android:Theme.Material">
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
         <item name="android:colorPrimary">@color/primaryColor</item>
         <item name="android:colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="android:windowBackground">@color/background</item>
