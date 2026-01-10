@@ -18,6 +18,7 @@
 
 package de.duenndns.gmdice;
 
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
@@ -32,6 +33,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -245,6 +247,9 @@ public class GameMasterDice extends ListActivity
 		dicecache.add(ds);
 
 		resultview.setText(roll);
+		ObjectAnimator animator = ObjectAnimator.ofArgb(resultview, "textColor", 0xffff8080, 0xffffffff, 0xffc0c090);
+		animator.setDuration(400);
+		animator.start();
 
 		String rolllog = ds.toString() + ": " + roll;
 		Log.d(TAG, "rolled: " + rolllog);
