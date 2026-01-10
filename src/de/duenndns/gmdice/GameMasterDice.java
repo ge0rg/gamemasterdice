@@ -31,9 +31,11 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,6 +56,7 @@ public class GameMasterDice extends ListActivity
 		implements OnClickListener, OnLongClickListener
 {
 	private static String TAG = "GameMasterDice";
+	protected static long BLANK_TIMEOUT = 10*1000;
 
 	// map button IDs to dice
 	int button_ids[] = { R.id.die0, R.id.die1, R.id.die2, R.id.die3 };
@@ -62,6 +65,13 @@ public class GameMasterDice extends ListActivity
 	int button_colors[] = { 0xfff0b0f0, 0xffc0c0f0, 0xffc0f0c0, 0xfff0c0c0, 0xffb0f0f0 };
 	TextView resultview;
 	static RollResultAdapter resultlog;
+	CountDownTimer blankTimer = new CountDownTimer(BLANK_TIMEOUT, BLANK_TIMEOUT) {
+		public void onTick(long millisUntilFinished) {}
+		public void onFinish() {
+			resultlog.add(new RollResult(null, 0x80808080));
+		}
+	};
+
 	SharedPreferences prefs;
 
 	DiceSet button_cfg[] = {
@@ -246,10 +256,12 @@ public class GameMasterDice extends ListActivity
 		String roll = ds.roll(this, generator);
 		dicecache.add(ds);
 
+		blankTimer.cancel();
 		resultview.setText(roll);
 		ObjectAnimator animator = ObjectAnimator.ofArgb(resultview, "textColor", 0xffff8080, 0xffffffff, 0xffc0c090);
 		animator.setDuration(400);
 		animator.start();
+		blankTimer.start();
 
 		String rolllog = ds.toString() + ": " + roll;
 		Log.d(TAG, "rolled: " + rolllog);
@@ -414,8 +426,10 @@ class RollResultAdapter extends ArrayAdapter<RollResult> {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View res = super.getView(position, convertView, parent);
-		((TextView)res).setTextColor(getItem(position).color);
+		TextView res = (TextView)super.getView(position, convertView, parent);
+		RollResult item = getItem(position);
+		res.setTextColor(item.color);
+		res.setGravity(item.result == null ? Gravity.CENTER : Gravity.LEFT);
 		return res;
 	}
 }
