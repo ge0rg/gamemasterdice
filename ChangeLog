@@ -1,4 +1,10 @@
-1.0.0:
+1.2:
+ * Briefly flash result display
+ * Add a spacer to the log after 10s of inactivity
+ * Show timestamp in dice roll details
+1.1:
+ * use SecureRandom
+1.0:
  * GameMaster Dice is back!
  * Material theme
  * Fudge dice can be reconfigured now
