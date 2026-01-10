@@ -33,6 +33,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -395,10 +396,18 @@ abstract class OnDiceChange {
 class RollResult {
 	String result;
 	int color;
+	long ts;
 
 	RollResult(String res, int col) {
 		result = res;
 		color = col;
+		ts = System.currentTimeMillis();
+		if (result == null)
+			ts = ts - GameMasterDice.BLANK_TIMEOUT;
+	}
+
+	public String getRelativeTimestamp() {
+		return DateUtils.getRelativeTimeSpanString(ts, System.currentTimeMillis(), 0).toString();
 	}
 
 	public void setColor(int col) {
@@ -406,15 +415,19 @@ class RollResult {
 	}
 
 	public void showDetails(Context ctx) {
+		if (result == null)
+			return;
 		new AlertDialog.Builder(ctx)
 			.setTitle(R.string.roll_result)
-			.setMessage(result)
+			.setMessage(getRelativeTimestamp() + "\n\n" + result)
 			.setPositiveButton(android.R.string.ok, null)
 			.create().show();
 	}
 
 	@Override
 	public String toString() {
+		if (result == null)
+			return getRelativeTimestamp();
 		return result;
 	}
 }
