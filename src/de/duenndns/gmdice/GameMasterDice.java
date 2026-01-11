@@ -420,8 +420,10 @@ class RollResult {
 			ts = ts - GameMasterDice.BLANK_TIMEOUT;
 	}
 
-	public String getRelativeTimestamp() {
-		return DateUtils.getRelativeTimeSpanString(ts, System.currentTimeMillis(), 0).toString();
+	public String getRelativeTimestamp(long divisor) {
+		long delta_t = System.currentTimeMillis() - ts;
+		delta_t = (delta_t / divisor) * divisor;
+		return DateUtils.getRelativeTimeSpanString(ts, delta_t + ts, 0).toString();
 	}
 
 	public void setColor(int col) {
@@ -433,7 +435,7 @@ class RollResult {
 			return;
 		new AlertDialog.Builder(ctx)
 			.setTitle(R.string.roll_result)
-			.setMessage(getRelativeTimestamp() + "\n\n" + result)
+			.setMessage(getRelativeTimestamp(1L) + "\n\n" + result)
 			.setPositiveButton(android.R.string.ok, null)
 			.create().show();
 	}
@@ -441,7 +443,7 @@ class RollResult {
 	@Override
 	public String toString() {
 		if (result == null)
-			return getRelativeTimestamp();
+			return getRelativeTimestamp(GameMasterDice.BLANK_TIMEOUT);
 		return result;
 	}
 }
