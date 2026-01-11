@@ -32,6 +32,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -66,10 +67,21 @@ public class GameMasterDice extends ListActivity
 	int button_colors[] = { 0xfff0b0f0, 0xffc0c0f0, 0xffc0f0c0, 0xfff0c0c0, 0xffb0f0f0 };
 	TextView resultview;
 	static RollResultAdapter resultlog;
+	// redraw the screen every 10s to update the spacers
+	Handler updateHandler = new Handler();
+	Runnable updateRefresh = new Runnable() {
+		@Override public void run() {
+			resultlog.notifyDataSetChanged();
+			updateHandler.postDelayed(this, BLANK_TIMEOUT);
+		}
+	};
 	CountDownTimer blankTimer = new CountDownTimer(BLANK_TIMEOUT, BLANK_TIMEOUT) {
 		public void onTick(long millisUntilFinished) {}
 		public void onFinish() {
 			resultlog.add(new RollResult(null, 0x80808080));
+			// shift the refresh task to run in sync with the last spacer
+			updateHandler.removeCallbacks(updateRefresh);
+			updateHandler.postDelayed(updateRefresh, BLANK_TIMEOUT);
 		}
 	};
 
@@ -127,11 +139,13 @@ public class GameMasterDice extends ListActivity
 		for (int i = 0; i < button_ids.length; i++)
 			buttons[i].setText(button_cfg[i].toString());
 		configKeepScreenOn();
+		updateHandler.postDelayed(updateRefresh, BLANK_TIMEOUT);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
+		updateHandler.removeCallbacks(updateRefresh);
 		storeDicePrefs();
 	}
 
