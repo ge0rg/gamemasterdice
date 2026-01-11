@@ -139,7 +139,7 @@ public class GameMasterDice extends ListActivity
 		for (int i = 0; i < button_ids.length; i++)
 			buttons[i].setText(button_cfg[i].toString());
 		configKeepScreenOn();
-		updateHandler.postDelayed(updateRefresh, BLANK_TIMEOUT);
+		updateHandler.post(updateRefresh);
 	}
 
 	@Override
