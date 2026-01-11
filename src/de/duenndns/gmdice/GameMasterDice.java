@@ -259,8 +259,8 @@ public class GameMasterDice extends ListActivity
 
 		blankTimer.cancel();
 		resultview.setText(roll);
-		ObjectAnimator animator = ObjectAnimator.ofArgb(resultview, "textColor", 0xffff8080, 0xffffffff, 0xffc0c090);
-		animator.setDuration(400);
+		ObjectAnimator animator = ObjectAnimator.ofArgb(resultview, "textColor", 0xfffff0db, 0xffaca142);
+		animator.setDuration(200);
 		animator.start();
 		blankTimer.start();
 
