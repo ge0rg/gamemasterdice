@@ -7,7 +7,7 @@
     <uses-feature android:name="android.hardware.touchscreen"
                   android:required="false" />
 
-    <application android:label="@string/app_name" android:icon="@drawable/logo"
+    <application android:label="@string/app_name_long" android:icon="@drawable/logo"
                  android:banner="@drawable/tv_banner"
         >
         <activity android:name=".GameMasterDice"
