@@ -1,6 +1,8 @@
 # GameMaster Dice
 
-![GM Dice Logo Banner](logo/feature-graphic.png)
+![GM Dice Logo Banner](src/main/play/listings/en-US/graphics/feature-graphic/1.png)
+
+[(![Get it on Google Play](logo/googleplay.png))](https://play.google.com/store/apps/details?id=de.duenndns.gmdice)
 
 GameMaster Dice is a dice rolling app with a clean interface, trying to make
 the job easier for game masters. It has four changeable preset buttons
