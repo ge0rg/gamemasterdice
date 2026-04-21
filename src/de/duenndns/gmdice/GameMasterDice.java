@@ -22,14 +22,20 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Insets;
 import android.graphics.PorterDuff;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbDeviceConnection;
+import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,7 +44,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,86 +58,91 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.hoho.android.usbserial.driver.UsbSerialDriver;
+import com.hoho.android.usbserial.driver.UsbSerialPort;
+import com.hoho.android.usbserial.driver.UsbSerialProber;
+
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class GameMasterDice extends ListActivity
-		implements OnClickListener, OnLongClickListener
+	implements OnClickListener, OnLongClickListener
 {
-	private static String TAG = "GameMasterDice";
-	protected static long BLANK_TIMEOUT = 10*1000;
+private static String TAG = "GameMasterDice";
+protected static long BLANK_TIMEOUT = 10*1000;
 
-	// map button IDs to dice
-	int button_ids[] = { R.id.die0, R.id.die1, R.id.die2, R.id.die3 };
-	Button buttons[];
-	Button button_more;
-	int button_colors[] = { 0xfff0b0f0, 0xffc0c0f0, 0xffc0f0c0, 0xfff0c0c0, 0xffb0f0f0 };
-	TextView resultview;
-	static RollResultAdapter resultlog;
-	// redraw the screen every 10s to update the spacers
-	Handler updateHandler = new Handler();
-	Runnable updateRefresh = new Runnable() {
-		@Override public void run() {
-			resultlog.notifyDataSetChanged();
-			updateHandler.postDelayed(this, BLANK_TIMEOUT);
-		}
-	};
-	CountDownTimer blankTimer = new CountDownTimer(BLANK_TIMEOUT, BLANK_TIMEOUT) {
-		public void onTick(long millisUntilFinished) {}
-		public void onFinish() {
-			statusLog(null);
-			// shift the refresh task to run in sync with the last spacer
-			updateHandler.removeCallbacks(updateRefresh);
-			updateHandler.postDelayed(updateRefresh, BLANK_TIMEOUT);
-		}
-	};
+// map button IDs to dice
+int button_ids[] = { R.id.die0, R.id.die1, R.id.die2, R.id.die3 };
+Button buttons[];
+Button button_more;
+int button_colors[] = { 0xfff0b0f0, 0xffc0c0f0, 0xffc0f0c0, 0xfff0c0c0, 0xffb0f0f0 };
+TextView resultview;
+static RollResultAdapter resultlog;
+// redraw the screen every 10s to update the spacers
+Handler updateHandler = new Handler();
+Runnable updateRefresh = new Runnable() {
+	@Override public void run() {
+		resultlog.notifyDataSetChanged();
+		updateHandler.postDelayed(this, BLANK_TIMEOUT);
+	}
+};
+CountDownTimer blankTimer = new CountDownTimer(BLANK_TIMEOUT, BLANK_TIMEOUT) {
+	public void onTick(long millisUntilFinished) {}
+	public void onFinish() {
+		statusLog(null);
+		// shift the refresh task to run in sync with the last spacer
+		updateHandler.removeCallbacks(updateRefresh);
+		updateHandler.postDelayed(updateRefresh, BLANK_TIMEOUT);
+	}
+};
 
-	SharedPreferences prefs;
+SharedPreferences prefs;
 
-	DiceSet button_cfg[] = {
-		DiceSet.getDiceSet(DiceSet.DSA),
-		DiceSet.getDiceSet(1, 20, 0),
-		DiceSet.getDiceSet(1, 6, 0),
-		DiceSet.getDiceSet(1, 6, 4)
-	};
-	DiceCache dicecache = new DiceCache(10);
-	Random generator = new SecureRandom();
+DiceSet button_cfg[] = {
+	DiceSet.getDiceSet(DiceSet.DSA),
+	DiceSet.getDiceSet(1, 20, 0),
+	DiceSet.getDiceSet(1, 6, 0),
+	DiceSet.getDiceSet(1, 6, 4)
+};
+DiceCache dicecache = new DiceCache(10);
+Random generator = new SecureRandom();
 
-	@Override
-	public void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.act_gmdice);
-		setTitle(R.string.app_name_long);
+@Override
+public void onCreate(Bundle savedInstanceState)
+{
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.act_gmdice);
+	setTitle(R.string.app_name_long);
 
-		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+	prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-		buttons = new Button[button_ids.length];
-		for (int i = 0; i < button_ids.length; i++) {
-			buttons[i] = (Button)findViewById(button_ids[i]);
-			buttons[i].setOnClickListener(this);
-			buttons[i].setOnLongClickListener(this);
-			buttons[i].setTransformationMethod(null); // work around r21+ applying ALLCAPS
-			buttons[i].getBackground().setColorFilter(button_colors[i], PorterDuff.Mode.MULTIPLY);
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-				buttons[i].setTextColor(getResources().getColor(R.color.primaryButtonColor));
-		}
-		button_more = (Button)findViewById(R.id.more);
-		button_more.setOnClickListener(this);
-		button_more.setOnLongClickListener(this);
-		button_more.getBackground().setColorFilter(button_colors[4], PorterDuff.Mode.MULTIPLY);
+	buttons = new Button[button_ids.length];
+	for (int i = 0; i < button_ids.length; i++) {
+		buttons[i] = (Button)findViewById(button_ids[i]);
+		buttons[i].setOnClickListener(this);
+		buttons[i].setOnLongClickListener(this);
+		buttons[i].setTransformationMethod(null); // work around r21+ applying ALLCAPS
+		buttons[i].getBackground().setColorFilter(button_colors[i], PorterDuff.Mode.MULTIPLY);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-			button_more.setTextColor(getResources().getColor(R.color.primaryButtonColor));
-		resultview = (TextView)findViewById(R.id.rollresult);
-		if (resultlog == null)
-			resultlog = new RollResultAdapter(getApplicationContext());
-		setListAdapter(resultlog);
+			buttons[i].setTextColor(getResources().getColor(R.color.primaryButtonColor));
+	}
+	button_more = (Button)findViewById(R.id.more);
+	button_more.setOnClickListener(this);
+	button_more.setOnLongClickListener(this);
+	button_more.getBackground().setColorFilter(button_colors[4], PorterDuff.Mode.MULTIPLY);
+	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+		button_more.setTextColor(getResources().getColor(R.color.primaryButtonColor));
+	resultview = (TextView)findViewById(R.id.rollresult);
+	if (resultlog == null)
+		resultlog = new RollResultAdapter(getApplicationContext());
+	setListAdapter(resultlog);
 
 
-		if (savedInstanceState != null) {
-			getListView().onRestoreInstanceState(savedInstanceState.getParcelable("resultlog"));
-		}
+	if (savedInstanceState != null) {
+		getListView().onRestoreInstanceState(savedInstanceState.getParcelable("resultlog"));
+	}
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
 			findViewById(R.id.rootview).setOnApplyWindowInsetsListener((v, insets) -> {
 				// GMDice is using a Material action bar that automatically adapts.
@@ -144,6 +154,15 @@ public class GameMasterDice extends ListActivity
 				return insets;
 			});
 		}
+		this.registerReceiver(grantUsbReceiver, new IntentFilter(INTENT_ACTION_GRANT_USB), Context.RECEIVER_NOT_EXPORTED);
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		if("android.hardware.usb.action.USB_DEVICE_ATTACHED".equals(intent.getAction())) {
+			connectUsb();
+		}
+		super.onNewIntent(intent);
 	}
 
 	@Override
@@ -286,7 +305,22 @@ public class GameMasterDice extends ListActivity
 	}
 
 	public void roll(DiceSet ds, int color) {
-		String roll = ds.roll(this, generator);
+		resultview.setText("⏳");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String roll = ds.roll(GameMasterDice.this, generator);
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						onRollResult(ds, color, roll);
+					}
+				});
+			}
+		}).start();
+	}
+
+	public void onRollResult(DiceSet ds, int color, String roll) {
 		dicecache.add(ds);
 
 		blankTimer.cancel();
@@ -418,6 +452,71 @@ public class GameMasterDice extends ListActivity
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		resultlog.getItem(position).showDetails(this);
+	}
+
+	// USB code
+	private static final String INTENT_ACTION_GRANT_USB = "GMDice.GRANT_USB";
+	BroadcastReceiver grantUsbReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if(INTENT_ACTION_GRANT_USB.equals(intent.getAction())) {
+				boolean usbPermission = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false);
+				connectUsb();
+			}
+		}
+	};
+	void connectUsb() {
+		Log.d(TAG, "connectUsb");
+		UsbDevice device = null;
+		UsbManager usbManager = (UsbManager) this.getSystemService(Context.USB_SERVICE);
+		for(UsbDevice v : usbManager.getDeviceList().values()) {
+			Log.d(TAG, "USB device: " + v);
+			if (v.getVendorId() == 0x0483 && v.getProductId() == 0x5740)
+				device = v;
+		}
+		if (device == null) {
+			statusLog("Unknown USB device");
+			return;
+		}
+		UsbSerialDriver driver = UsbSerialProber.getDefaultProber().probeDevice(device);
+		if (driver == null) {
+			statusLog("Unsupported USB Serial device");
+			return;
+		}
+		UsbSerialPort port = driver.getPorts().get(0);
+		UsbDeviceConnection usbConnection = usbManager.openDevice(driver.getDevice());
+		if(usbConnection == null && !usbManager.hasPermission(driver.getDevice())) {
+			int flags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_MUTABLE : 0;
+			Intent intent = new Intent(INTENT_ACTION_GRANT_USB);
+			intent.setPackage(this.getPackageName());
+			PendingIntent usbPermissionIntent = PendingIntent.getBroadcast(this, 0, intent, flags);
+			usbManager.requestPermission(driver.getDevice(), usbPermissionIntent);
+			return;
+		}
+		if(usbConnection == null) {
+			if (!usbManager.hasPermission(driver.getDevice()))
+				statusLog("USB permission denied");
+			else
+				statusLog("USB open failed");
+			return;
+		}
+		try {
+			port.open(usbConnection);
+			port.setParameters(115200, 8, 1, UsbSerialPort.PARITY_NONE);
+			port.setDTR(true);
+			port.write("GET deviceId\r\n".getBytes(), 2000);
+			RadProRandom rpr = new RadProRandom(port);
+			String deviceIdResponse = rpr.readUsbLine();
+			if (deviceIdResponse.startsWith("OK ")) {
+				String[] deviceId = deviceIdResponse.substring(3).split(";");
+				statusLog("USB: " + deviceId[0]);
+			}
+			generator = rpr;
+		} catch (IOException e) {
+			statusLog(e.getMessage());
+		}
+
+
 	}
 }
 
