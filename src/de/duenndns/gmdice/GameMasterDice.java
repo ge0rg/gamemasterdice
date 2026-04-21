@@ -78,7 +78,7 @@ public class GameMasterDice extends ListActivity
 	CountDownTimer blankTimer = new CountDownTimer(BLANK_TIMEOUT, BLANK_TIMEOUT) {
 		public void onTick(long millisUntilFinished) {}
 		public void onFinish() {
-			resultlog.add(new RollResult(null, 0x80808080));
+			statusLog(null);
 			// shift the refresh task to run in sync with the last spacer
 			updateHandler.removeCallbacks(updateRefresh);
 			updateHandler.postDelayed(updateRefresh, BLANK_TIMEOUT);
@@ -266,7 +266,11 @@ public class GameMasterDice extends ListActivity
 			}
 		}
 	}
-	
+
+	public void statusLog(String status) {
+		resultlog.add(new RollResult(status, 0x80808080));
+	}
+
 	public void roll(DiceSet ds, int color) {
 		String roll = ds.roll(this, generator);
 		dicecache.add(ds);
