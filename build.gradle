@@ -19,6 +19,7 @@ allprojects {
 	repositories {
 		mavenCentral()
 		google()
+		maven { url 'https://jitpack.io' }
 	}
 }
 
@@ -41,7 +42,7 @@ android {
 	namespace 'de.duenndns.gmdice'
 	compileSdk 36
 	defaultConfig {
-		minSdk 11
+		minSdk 17
 		targetSdk 36
 		versionName "$build_revision"
 		versionCode 11
@@ -82,4 +83,7 @@ android {
 	lintOptions {
 		disable 'MissingTranslation'
 	}
+}
+dependencies {
+	implementation 'com.github.mik3y:usb-serial-for-android:3.10.0'
 }
