@@ -18,6 +18,7 @@
 
 package de.duenndns.gmdice;
 
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -277,7 +278,8 @@ public class GameMasterDice extends ListActivity
 
 		blankTimer.cancel();
 		resultview.setText(roll);
-		ObjectAnimator animator = ObjectAnimator.ofArgb(resultview, "textColor", 0xfffff0db, 0xffaca142);
+		ObjectAnimator animator = ObjectAnimator.ofInt(resultview, "textColor", 0xfffff0db, 0xffaca142);
+		animator.setEvaluator(new ArgbEvaluator());
 		animator.setDuration(200);
 		animator.start();
 		blankTimer.start();
