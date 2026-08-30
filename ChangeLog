@@ -1,3 +1,7 @@
+1.3:
+ * Changed app name from GMDice to GameMaster dice
+ * Fix blinking on Android 4.x
+ * Use Android Edge-to-edge layout mandatory in Android 16
 1.2:
  * Briefly flash result display
  * Add a spacer to the log after 10s of inactivity
