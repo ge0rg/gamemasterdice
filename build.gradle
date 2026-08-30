@@ -39,10 +39,10 @@ play {
 
 android {
 	namespace 'de.duenndns.gmdice'
-	compileSdk 35
+	compileSdk 36
 	defaultConfig {
 		minSdk 11
-		targetSdk 35
+		targetSdk 36
 		versionName "$build_revision"
 		versionCode 11
 		resValue "string", "build_revision", "$build_revision"
