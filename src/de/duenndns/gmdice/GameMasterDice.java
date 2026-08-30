@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Insets;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
@@ -44,6 +45,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.*;
+import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -130,6 +132,17 @@ public class GameMasterDice extends ListActivity
 
 		if (savedInstanceState != null) {
 			getListView().onRestoreInstanceState(savedInstanceState.getParcelable("resultlog"));
+		}
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+			findViewById(R.id.rootview).setOnApplyWindowInsetsListener((v, insets) -> {
+				// GMDice is using a Material action bar that automatically adapts.
+				// We apply the insets to the "rootview" layout that excludes the action bar,
+				// and ignore the top padding (taken care of by the action bar)
+				Insets sbi = insets.getInsets(WindowInsets.Type.navigationBars());
+				Log.d(TAG, "window insets: " + sbi);
+				v.setPadding(sbi.left, 0, sbi.right, sbi.bottom);
+				return insets;
+			});
 		}
 	}
 
